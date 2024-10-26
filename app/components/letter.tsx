@@ -1,20 +1,40 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { LetterState } from '../lib/definitions';
+ import { LetterProps } from '../lib/definitions';
+ import { useState } from 'react';
 
-export default function Letter({ letter }: { letter: string }) {
-	const [letterState, setLetterState] = useState<LetterState>(null);
+export default function Letter({ letter, letterState, position, handleChange }: LetterProps) {
+	const [inputValue, setInputValue] = useState<string>('');
+	const colors = {
+		wrong: '#b91c1c',
+		misplaced: '#fbbf24',
+		correct: '#4ade80',
+	};
 
-	useEffect(() => {
-		setLetterState(null);
-	}, [])
+	function handleKeyboard(e: React.KeyboardEvent<HTMLInputElement>) {
+		const key = e.key.toUpperCase();
+		if (key.length === 1) {
+			setInputValue(key);
+			handleChange(key, position);
+		}
+	}
+
+	function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const value = e.target.value.toUpperCase();
+
+		if (value.length <= 1) {
+			setInputValue(value);
+			handleChange(value, position);
+		}
+	}
 
 	return (
-		<span 
-			className={`flex flex-row justify-center items-center text-2xl border-solid border-2 border-black w-7 h-7 md:w-16 md:h-16 md:text-5xl`}
-		>
-			{letterState && letter}
-		</span>
+		<input 
+			onKeyDown={handleKeyboard}
+			onChange={handleInputChange}
+			value={letterState === 'correct' ? letter : inputValue}
+			className={`flex flex-row justify-center items-center text-2xl border-solid border-2 border-black w-7 h-7 sm:w-16 sm:h-16 sm:text-5xl text-center bg-rose-300 text-slate-100`}
+			style={letterState && { backgroundColor: colors[letterState] }}
+		/>
 	);
 }

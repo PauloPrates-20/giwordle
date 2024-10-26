@@ -33,7 +33,7 @@ export default function Letter({ letter, letterState, position, handleChange }: 
 			onKeyDown={handleKeyboard}
 			onChange={handleInputChange}
 			value={letterState === 'correct' ? letter : inputValue}
-			className={`flex flex-row justify-center items-center text-3xl border-solid border-2 border-black w-8 h-8 sm:w-16 sm:h-16 sm:text-5xl text-center bg-rose-300 text-slate-100`}
+			className={`flex flex-row justify-center items-center text-3xl border-solid border-2 border-black w-9 h-9 sm:w-16 sm:h-16 sm:text-5xl text-center bg-rose-300 text-slate-100`}
 			style={letterState && { backgroundColor: colors[letterState] }}
 		/>
 	);

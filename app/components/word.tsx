@@ -15,13 +15,33 @@ export default function Word({ word }: { word: string }) {
 
 		if (value === '') {
 			newState = undefined;
-		}
-		else if (normalizedLetters.includes(value) || letters.includes(value)) {
-			if (normalizedLetters[position] === value || letters[position] === value) {
-				newState = 'correct';
-			} else {
-				newState = 'misplaced';
-			}
+		} else if (normalizedLetters.includes(value) || letters.includes(value)) {
+				if (normalizedLetters[position] === value || letters[position] === value) {
+					newState = 'correct';
+				} else {
+					let index = 0;
+					let count = 0;
+					const stateIndexes = []
+
+					while (index !== -1) {
+						index = letters.indexOf(value, index);
+
+						if (index !== -1) {
+							stateIndexes.push(index);
+							index++;
+						};
+					}
+
+					for (const index of stateIndexes)  {
+						if (letterState[index] === 'correct') count++;
+					}
+
+					if (count === stateIndexes.length) {
+						newState = 'wrong';
+					} else {
+						newState = 'misplaced';
+					}
+				}
 		}
 
 		setLetterState(previousState => 

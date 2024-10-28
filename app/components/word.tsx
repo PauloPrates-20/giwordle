@@ -64,7 +64,7 @@ export default function Word({ word, wordCount, wordIndex, active, setActive }: 
 		})
 
 		if (count === letterState.length) {
-			setActive(Math.min(wordIndex + 1, wordCount))
+			setActive(Math.min(wordIndex + 1, wordCount - 1))
 		}
 	}, [letterState]);
 

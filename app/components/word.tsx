@@ -46,7 +46,7 @@ export default function Word({ word, wordCount, wordIndex, active, setActive }: 
 			
 		}
 
-		if (value.length !== 0) {
+		if (newState === 'correct') {
 			activeLetter + 1 < letters.length ? setActiveLetter(activeLetter + 1) : setActiveLetter(0);
 		}
 

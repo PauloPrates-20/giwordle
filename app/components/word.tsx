@@ -1,12 +1,13 @@
 'use client';
 
 import Letter from '@/app/components/letter';
-import { useState } from 'react';
-import { LetterState } from '../lib/definitions';
+import { useState, useEffect } from 'react';
+import { LetterState, WordProps } from '../lib/definitions';
 
-export default function Word({ word }: { word: string }) {
+export default function Word({ word, wordCount, wordIndex, active, setActive }: WordProps) {
 	const letters = word.split('');
 	const [letterState, setLetterState] = useState<LetterState[]>(Array(letters.length).fill(undefined));
+	const [activeLetter, setActiveLetter] = useState(0);
 
 	function handleChange(value: string, position: number) {
 		let newState: LetterState = 'wrong';
@@ -42,19 +43,45 @@ export default function Word({ word }: { word: string }) {
 						newState = 'misplaced';
 					}
 				}
+			
+		}
+
+		if (newState === 'correct') {
+			activeLetter + 1 < letters.length ? setActiveLetter(activeLetter + 1) : setActiveLetter(0);
 		}
 
 		setLetterState(previousState => 
 			previousState.map((state: LetterState, index: number) => (index === position ? newState : state))
 		);
-
-		console.log(newState);
 	}
+
+	useEffect(() => {
+		let count = 0;
+		letterState.forEach(state => {
+			if (state === 'correct') {
+				count++;
+			}
+		})
+
+		if (count === letterState.length) {
+			setActive(Math.min(wordIndex + 1, wordCount - 1))
+		}
+	}, [letterState]);
 
 	return (
 		<p className='flex flex-row gap-3'>
 			{letters.map((letter: string, index: number) => (
-				<Letter letter={letter} letterState={letterState[index]} key={index} position={index} handleChange={handleChange} />
+				<Letter 
+					letter={letter} 
+					letterState={letterState[index]} 
+					key={index} 
+					letterIndex={index}
+					wordIndex={wordIndex}
+					active={activeLetter === index && active} 
+					handleChange={handleChange}
+					setActiveLetter={setActiveLetter}
+					setActiveWord={setActive}
+				/>
 			))}
 		</p>
 	);
